@@ -1,18 +1,11 @@
-# Node.js'in hafif bir sürümünü kullanıyoruz
 FROM node:18-alpine
-
-# Uygulama dizinini oluştur
 WORKDIR /usr/src/app
 
-# Bağımlılıkları kopyala ve yükle
-COPY package*.json ./
-RUN npm install
-
-# Tüm proje dosyalarını (services, index.html, main.js vb.) kopyala
+# Sadece mevcut tüm dosyaları kopyala (package.json aramayı bırakır)
 COPY . .
 
-# Uygulamanın çalışacağı port (Örn: 3000)
-EXPOSE 3000
+# npm install satırını siliyoruz çünkü dosya yok
+# RUN npm install 
 
-# Uygulamayı başlat
+EXPOSE 3000
 CMD ["node", "main.js"]
