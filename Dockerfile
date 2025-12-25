@@ -1,10 +1,11 @@
 FROM node:18-alpine
 WORKDIR /usr/src/app
 
-# Sadece iki nokta olmalı: "mevcut dizini" "çalışma dizinine" kopyala
+# Sadece mevcut dosyaları kopyala
 COPY . .
 
-# Uygulamanın dahili portu (main.js içinde hangi portu yazdıysan o olmalı)
-EXPOSE 3000
+# npm install satırını tamamen sil veya başına # koy
+# RUN npm install 
 
+EXPOSE 3000
 CMD ["node", "main.js"]
