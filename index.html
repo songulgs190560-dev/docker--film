@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Mikro Servis Paneli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🎬 MovieStream Info</h1>
+            <p>Stateless Micro-Architecture Demo</p>
+        </header>
+
+        <main>
+            <div class="search-section">
+                <input type="number" id="movieId" placeholder="Film ID (1 veya 2 yazın)" min="1">
+                <button onclick="getMovieData()">Bilgileri Getir</button>
+            </div>
+
+            <div id="loader" style="display: none;">Yükleniyor...</div>
+
+            <div id="result-card" class="card" style="display: none;">
+                <h2 id="movie-title"></h2>
+                <div class="details">
+                    <p><strong>Tür:</strong> <span id="movie-genre"></span></p>
+                    <p><strong>Yönetmen:</strong> <span id="movie-director"></span></p>
+                    <hr>
+                    <p><strong>Yayın Platformu:</strong> <span id="stream-platform"></span></p>
+                    <p><strong>Süre:</strong> <span id="stream-duration"></span></p>
+                    <div id="status-badge"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
