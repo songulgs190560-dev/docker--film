@@ -1,16 +1,36 @@
-async function loadMoviePage(movieId) {
-    // API 1: Film detaylarını al
-    const infoRequest = await fetch(`http://movie-service/api/info/${movieId}`);
-    const movieData = await infoRequest.json();
+const express = require('express');
+const app = express();
+const path = require('path');
 
-    // API 2: Yayın bilgilerini al
-    const streamRequest = await fetch(`http://stream-service/api/status/${movieId}`);
-    const streamData = await streamRequest.json();
+// Docker için port 3000 olarak sabitlendi
+const PORT = 3000;
 
-    // UI'da Birleştirme
-    document.getElementById('content').innerHTML = `
-        <h1>${movieData.title}</h1>
-        <p>Tür: ${movieData.genre}</p>
-        <p>Süre: ${streamData.duration} - Platform: ${streamData.platform}</p>
-    `;
-}
+// Statik dosyaları (index.html, style.css vb.) sunmak için
+app.use(express.static(path.join(__dirname, '.')));
+
+// ANA API - Ülke Bilgisi (Stateless)
+app.get('/api/country', (req, res) => {
+    res.json({
+        service: "Location Service",
+        status: "Online",
+        data: { country: "Türkiye", code: "TR" }
+    });
+});
+
+// İKİNCİ API - Zaman Bilgisi (Stateless)
+app.get('/api/time', (req, res) => {
+    res.json({
+        service: "Time Service",
+        status: "Online",
+        time: new Date().toLocaleTimeString('tr-TR')
+    });
+});
+
+// Sunucuyu başlatma (DOCKER İÇİN KRİTİK: 0.0.0.0)
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`-----------------------------------------`);
+    console.log(`Sunucu başarıyla kalktı!`);
+    console.log(`Docker İç Port: ${PORT}`);
+    console.log(`Yerel erişim: http://localhost:8080`);
+    console.log(`-----------------------------------------`);
+});
