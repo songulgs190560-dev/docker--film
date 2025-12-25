@@ -1,36 +1,23 @@
-const express = require('express');
-const app = express();
-const path = require('path');
+const http = require('http');
 
-// Docker için port 3000 olarak sabitlendi
 const PORT = 3000;
 
-// Statik dosyaları (index.html, style.css vb.) sunmak için
-app.use(express.static(path.join(__dirname, '.')));
-
-// ANA API - Ülke Bilgisi (Stateless)
-app.get('/api/country', (req, res) => {
-    res.json({
-        service: "Location Service",
-        status: "Online",
-        data: { country: "Türkiye", code: "TR" }
-    });
+const server = http.createServer((req, res) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    if (req.url === '/api/country') {
+        res.writeHead(200);
+        res.end(JSON.stringify({ service: "Location", country: "Türkiye", code: "TR" }));
+    } else if (req.url === '/api/time') {
+        res.writeHead(200);
+        res.end(JSON.stringify({ service: "Time", now: new Date().toLocaleString('tr-TR') }));
+    } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>Sunucu Calisiyor!</h1><p>API testleri: /api/country veya /api/time</p>');
+    }
 });
 
-// İKİNCİ API - Zaman Bilgisi (Stateless)
-app.get('/api/time', (req, res) => {
-    res.json({
-        service: "Time Service",
-        status: "Online",
-        time: new Date().toLocaleTimeString('tr-TR')
-    });
-});
-
-// Sunucuyu başlatma (DOCKER İÇİN KRİTİK: 0.0.0.0)
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`-----------------------------------------`);
-    console.log(`Sunucu başarıyla kalktı!`);
-    console.log(`Docker İç Port: ${PORT}`);
-    console.log(`Yerel erişim: http://localhost:8080`);
-    console.log(`-----------------------------------------`);
-});
+// DOCKER İÇİN KRİTİK: '0.0.0.0' eklenmelidir
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Sunucu http://localhost:${PORT} uzerinde aktif.`);
+});;
